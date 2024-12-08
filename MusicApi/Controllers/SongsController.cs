@@ -1,0 +1,23 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
+using MusicApi.Models;
+using System.Collections.Generic;
+using System.Reflection;
+
+namespace MusicApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class SongController : ControllerBase
+    {
+        private List<Song> songs = new List<Song>()
+        {
+            new Song(){Id=0, Title="Willow", Language ="English" },
+            new Song(){Id=1, Title="After Glow", Language ="English"}
+        };
+        [HttpGet]
+        public IEnumerable<Song> Get()
+        { return songs; }
+    }
+}
