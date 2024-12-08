@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
+﻿using Microsoft.AspNetCore.Mvc;
+using MusicApi.Data;
 using MusicApi.Models;
 using System.Collections.Generic;
-using System.Reflection;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MusicApi.Controllers
 {
@@ -11,30 +11,41 @@ namespace MusicApi.Controllers
     [ApiController]
     public class SongsController : ControllerBase
     {
-        private static List<Song> songs = new List<Song>()
+        private ApiDbContext _dbContext;
+        public SongsController(ApiDbContext dbContext)
         {
-            new Song(){Id=0, Title="Willow", Language ="English" },
-            new Song(){Id=1, Title="After Glow", Language ="English"}
-        };
+            _dbContext = dbContext;
+        }
+        // GET: api/<SongsController>
         [HttpGet]
         public IEnumerable<Song> Get()
-        { return songs; }
+        {
+            return _dbContext.Songs;
+        }
 
+        // GET api/<SongsController>/5
+        [HttpGet("{id}")]
+        public string Get(int id)
+        {
+            return "value";
+        }
+
+        // POST api/<SongsController>
         [HttpPost]
-        public void Post([FromBody]Song song)
+        public void Post([FromBody] string value)
         {
-            songs.Add(song);
         }
+
+        // PUT api/<SongsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Song song)
+        public void Put(int id, [FromBody] string value)
         {
-            songs[id] = song;
         }
+
+        // DELETE api/<SongsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            songs.RemoveAt(id);
         }
-            
     }
 }
