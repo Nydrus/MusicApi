@@ -25,27 +25,37 @@ namespace MusicApi.Controllers
 
         // GET api/<SongsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Song Get(int id)
         {
-            return "value";
+           var song = _dbContext.Songs.Find(id);
+            return song;
         }
 
         // POST api/<SongsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Song song)
         {
+            _dbContext.Add(song);
+            _dbContext.SaveChanges();
         }
 
         // PUT api/<SongsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] Song songObj)
         {
+           var song = _dbContext.Songs.Find(id);
+            song.Title = songObj.Title;
+            song.Language = songObj.Language;
+            _dbContext.SaveChanges();
         }
 
         // DELETE api/<SongsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+           var song = _dbContext.Songs.Find(id);
+            _dbContext.Songs.Remove(song);
+            _dbContext.SaveChanges();
         }
     }
 }
