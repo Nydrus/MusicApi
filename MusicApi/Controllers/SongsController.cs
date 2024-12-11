@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicApi.Data;
 using MusicApi.Models;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -44,13 +46,26 @@ namespace MusicApi.Controllers
             }
         }
 
+        //// POST api/<SongsController>
+        //[HttpPost]
+        //public async Task<IActionResult> Post([FromBody] Song song)
+        //{
+        //    await _dbContext.AddAsync(song);
+        //   await _dbContext.SaveChangesAsync();
+        //    return StatusCode(StatusCodes.Status201Created);
+        //}
         // POST api/<SongsController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Song song)
+        public async Task Post([FromForm] Song song)
         {
-            await _dbContext.AddAsync(song);
-           await _dbContext.SaveChangesAsync();
-            return StatusCode(StatusCodes.Status201Created);
+            string connectionString = @"DefaultEndpointsProtocol=https;AccountName=musicblobstorage;AccountKey=U/YdF93ZRP+sZITZmAdpLqAy1Ek1zYg8cfySWLE72cnXyrZsHk7P4Trq45n3JzMm6wp/GUdx23Vw+AStvPYMVA==;EndpointSuffix=core.windows.net";
+            string containerName = "songscover";
+            BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
+            BlobClient blobClient = blobContainerClient.GetBlobClient(song.Image.FileName);
+            var memoryStream = new MemoryStream();
+           await song.Image.CopyToAsync(memoryStream);
+            memoryStream.Position=0;
+            await blobClient.UploadAsync(memoryStream);
         }
 
         // PUT api/<SongsController>/5
@@ -66,6 +81,7 @@ namespace MusicApi.Controllers
             {
                 song.Title = songObj.Title;
                 song.Language = songObj.Language;
+                song.Duration= songObj.Duration;
                 await _dbContext.SaveChangesAsync();
                 return Ok("Record updated sucessfully");
             }
