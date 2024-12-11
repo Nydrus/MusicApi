@@ -11,5 +11,6 @@ namespace MusicApi.Models
         public string Duration { get; set; }
         [NotMapped]
         public IFormFile Image { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
