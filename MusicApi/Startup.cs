@@ -30,6 +30,7 @@ namespace MusicApi
         {
 
             services.AddControllers();
+            services.AddMvc().AddXmlSerializerFormatters();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MusicApi", Version = "v1" });
