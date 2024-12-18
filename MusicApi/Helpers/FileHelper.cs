@@ -1,8 +1,9 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using MusicApi.Models;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MusicApi.Helpers
@@ -11,7 +12,7 @@ namespace MusicApi.Helpers
     {
         public static async Task<string> UploadImage(IFormFile file)
         {
-            string connectionString = @"DefaultEndpointsProtocol=https;AccountName=musicblobstorage;AccountKey=U/YdF93ZRP+sZITZmAdpLqAy1Ek1zYg8cfySWLE72cnXyrZsHk7P4Trq45n3JzMm6wp/GUdx23Vw+AStvPYMVA==;EndpointSuffix=core.windows.net";
+            string connectionString = @"DefaultEndpointsProtocol=https;AccountName=musicstorageaccount;AccountKey=C2HFKmmekJcJWNvIK/vOo4JbF8V09V6yxC77QOw6iarUbZT0TNR6ElunPXaNhHbVE3Kau/Jwa9ARbbvIRi1mmg==;EndpointSuffix=core.windows.net";
             string containerName = "songscover";
 
             BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
@@ -19,12 +20,13 @@ namespace MusicApi.Helpers
             var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
             memoryStream.Position = 0;
-            await blobClient.UploadAsync(memoryStream);                
+            await blobClient.UploadAsync(memoryStream);
             return blobClient.Uri.AbsoluteUri;
         }
+
         public static async Task<string> UploadFile(IFormFile file)
         {
-            string connectionString = @"DefaultEndpointsProtocol=https;AccountName=musicblobstorage;AccountKey=U/YdF93ZRP+sZITZmAdpLqAy1Ek1zYg8cfySWLE72cnXyrZsHk7P4Trq45n3JzMm6wp/GUdx23Vw+AStvPYMVA==;EndpointSuffix=core.windows.net";
+            string connectionString = @"DefaultEndpointsProtocol=https;AccountName=musicstorageaccount;AccountKey=C2HFKmmekJcJWNvIK/vOo4JbF8V09V6yxC77QOw6iarUbZT0TNR6ElunPXaNhHbVE3Kau/Jwa9ARbbvIRi1mmg==;EndpointSuffix=core.windows.net";
             string containerName = "audiofiles";
 
             BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
